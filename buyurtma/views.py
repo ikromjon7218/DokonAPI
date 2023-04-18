@@ -26,3 +26,7 @@ class SavatItemAPIView(APIView):
         savat = SavatItem.objects.filter(savat__profil__user=request.user)
         serializer = SavatItemSerializer(savat, many=True)
         return Response(serializer.data)
+
+class TanlanganViewSet(ModelViewSet):
+    queryset = Tanlangan.objects.all()
+    serializer_class = TanlanganSerializer

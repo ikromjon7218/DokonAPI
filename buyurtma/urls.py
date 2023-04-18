@@ -4,6 +4,7 @@ from .views import *
 urlpatterns = [
     path('', BuyurtmalarAPIView.as_view()),
     path('savat/', SavatItemAPIView.as_view()),
+    path('tanlangan/', TanlanganViewSet.as_view()),
 
 
     ]
