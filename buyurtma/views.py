@@ -7,7 +7,7 @@ from .serializers import *
 from .models import *
 from asosiy.models import *
 
-class BuyurtmaAPIView(APIView):
+class BuyurtmalarAPIView(APIView):
     def get(self, request):
         hoz_profil = Profil.objects.get(user=request.user)
         queryset = Buyurtma.objects.filter(profil=hoz_profil)
@@ -19,7 +19,7 @@ class BuyurtmaAPIView(APIView):
         if serializer.is_valid():
             serializer.save(profile=Profil.objects.get(user=request.user))
             return Response(serializer.data)
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SavatItemAPIView(APIView):
     def get(self, request):

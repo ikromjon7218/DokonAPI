@@ -4,7 +4,9 @@ from .models import *
 from .views import *
 
 urlpatterns = [
-    path('', UserCreate.as_view()),
-    path('user_create/', UserCreate.as_view()),
+    path('create/', UserCreateAPI.as_view()),
+    path('profil/', ProfilViewSet.as_view()),
+
     path('login/', LoginAPIView.as_view()),
+    path('logout/', LogoutView.as_view()),
 ]

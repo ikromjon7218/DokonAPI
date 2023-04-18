@@ -16,7 +16,11 @@ class SavatItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavatItem
         fields = '__all__'
-
+    def to_representation(self, instance):
+        malumot = super().to_representation(instance)
+        narx = instance.mahsulot.narx - (instance.mahsulot.chegirma * instance.mahsulot.narx / 100)
+        malumot["umumiy_summa"] = narx * instance.miqdor
+        return malumot
 class BuyurtmaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Buyurtma

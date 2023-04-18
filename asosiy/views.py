@@ -8,9 +8,11 @@ from .models import *
 
 class BolimViewSet(APIView):
     def get(self, request):
-        bolimlar = Bolim.objects.all()
-        serializer = BolimSerializer(bolimlar, many=True)
-        return Response(serializer.data)
+        if request.user.is_authenticated():
+            bolimlar = Bolim.objects.all()
+            serializer = BolimSerializer(bolimlar, many=True)
+            return Response(serializer.data)
+        return Response({"xabar": "Login qilinmagan."})
 class MahsulotAPIView(APIView):
     def get(self, request):
         search = request.query_params.get('search', None)
@@ -31,26 +33,22 @@ class ChegirmalilarAPIView(APIView):
         serializer = MahsulotSerializer(mahsulotlar, many=True)
         return Response(serializer.data)
 
-
-
 class Izoh_Mahsulot_APIView(APIView):
     def get(self, request, pk):
         izohlar = Izoh.objects.filter(mahsulot__id=pk)
         serializer = IzohSerializer(izohlar, many=True)
-        return Response(serializer.data)
-
+        return Response(serializer.data, status=status.HTTP_200_OK)
     def post(self, request, pk):
         if not request.user.is_authenticated:
             return Response({'error': 'Authentication required'}, status=status.HTTP_401_UNAUTHORIZED)
-        izoh = request.data
-        serializer = IzohSerializer(data=izoh)
+        serializer = IzohSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(mahsulot =  Mahsulot.objects.get(id=pk), profil = Profil.objects.get(user=request.user))
-
+            serializer.save(
+                mahsulot=Mahsulot.objects.get(id=pk),
+                profil=Profil.objects.get(user=request.user))
             natija = serializer.data
             natija['mahsulot'] = pk
             natija['profil'] = Profil.objects.get(user=request.user).id
-            print(request.user, natija)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

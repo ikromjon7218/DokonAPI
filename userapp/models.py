@@ -9,7 +9,7 @@ class Profil(models.Model):
     tel = models.CharField(max_length=20)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tugilgan_yil = models.DateField()
-    jins = models.CharField(max_length=5, choices=J, null=True)
+    jins = models.CharField(max_length=5, choices=J)
     shahar = models.CharField(max_length=50)
     def __str__(self):
-        return f"{self.ism}"
+        return self.ism

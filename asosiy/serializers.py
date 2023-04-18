@@ -23,9 +23,10 @@ class MahsulotSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         malumot = super().to_representation(instance)
-        malumot['yangi_narx'] = instance.chegirma*instance.narx/100
-        o = Izoh.objects.filter(mahsulot=instance)
-        malumot['ortacha_baho'] = o.aggregate(Avg('reyting'))['reyting__avg']
+        malumot['yangi_narx'] = instance.narx - instance.chegirma*instance.narx/100
+
+        izohlar = Izoh.objects.filter(mahsulot=instance)
+        malumot['ortacha_reting'] = round(izohlar.aggregate(Avg('reyting'))['reyting__avg'], 1)
         return malumot
     def validate_chegirma(self, qiymat):
         if qiymat < 0 or qiymat > 50:
