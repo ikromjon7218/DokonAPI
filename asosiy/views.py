@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from rest_framework.views import APIView, status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -6,10 +6,11 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from .models import *
 
-class BolimViewSet(ModelViewSet):
-    queryset = Bolim.objects.all()
-    serializer_class = BolimSerializer
-
+class BolimViewSet(APIView):
+    def get(self, request):
+        bolimlar = Bolim.objects.all()
+        serializer = BolimSerializer(bolimlar, many=True)
+        return Response(serializer.data)
 class MahsulotAPIView(APIView):
     def get(self, request):
         search = request.query_params.get('search', None)
@@ -24,7 +25,7 @@ class Bitta_MahsulotAPIView(APIView):
         mahsulot = Mahsulot.objects.get(id=pk)
         serializer = MahsulotSerializer(mahsulot)
         return Response(serializer.data)
-class ChegirmalarAPIView(APIView):
+class ChegirmalilarAPIView(APIView):
     def get(self, request):
         mahsulotlar = Mahsulot.objects.order_by('-chegirma')
         serializer = MahsulotSerializer(mahsulotlar, many=True)

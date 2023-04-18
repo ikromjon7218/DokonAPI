@@ -2,8 +2,8 @@ from rest_framework import serializers
 from .models import *
 from django.core.validators import MinValueValidator
 from django.db.models import Avg
+
 class BolimSerializer(serializers.ModelSerializer):
-    # bolimlar = BolimSerializer(many=True)
     class Meta:
         model = Bolim
         fields = '__all__'
